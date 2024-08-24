@@ -7,20 +7,21 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { ApiManager } from "../api/ApiManager";
-import { SetLego } from "../api/apiTypes";
 import { Grid, GridItem, Image, useToast } from "@chakra-ui/react";
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
+import { ApiManager } from "@/app/api/ApiManager";
+import { PartLego } from "@/app/api/apiTypes";
 
 export default function SetsScreen() {
-  const [data, setData] = useState<SetLego[]>([]);
+  const local = useLocalSearchParams<{ set_num: string }>();
+  const [data, setData] = useState<PartLego[]>([]);
   const [loading, setLoading] = useState(true);
   const toast = useToast();
 
   // Function to fetch data from the API
   const fetchData = async () => {
     try {
-      const response = await ApiManager.getSets();
+      const response = await ApiManager.getSetParts(local.set_num);
 
       if (!response.ok) {
         // Handle errors if response is not ok
@@ -32,7 +33,7 @@ export default function SetsScreen() {
     } catch (error) {
       console.error("Error fetching data:", error);
       toast({
-        title: "Sets error",
+        title: "Set error",
         description: `Error obtaing datasets, see console for more details`,
         status: "error",
         duration: 9000,
@@ -55,35 +56,31 @@ export default function SetsScreen() {
     <View style={styles.container}>
       <FlatList
         data={data}
-        keyExtractor={(item) => String(item.set_num)}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Link href={`/screens/SetScreen/${item.set_num}`} asChild>
-            <Pressable>
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>
               <GridItem colSpan={4}>
                 <View>
-                  <Text style={styles.title}>{item.name}</Text>
+                  <Text style={styles.title}>{item.part.name}</Text>
+                  <Text style={styles.subtitle}>Quantity: {item.quantity}</Text>
                   <Text style={styles.subtitle}>
-                    Set Number: {item.set_num}
+                    Is Spare: {item.is_spare ? "Yes" : "No"}
                   </Text>
                   <Text style={styles.subtitle}>
-                    Num parts: {item.num_parts}
+                    Element ID: {item.element_id}
                   </Text>
-                  <Text style={styles.subtitle}>Theme: {item.theme_id}</Text>
                 </View>
               </GridItem>
               <GridItem colStart={6} colEnd={6}>
                 <Image
                   boxSize="80px"
                   objectFit="cover"
-                  src={item.set_img_url}
-                  alt={item.name + " image"}
+                  src={item.part.part_img_url}
+                  alt={item.part.name + " image"}
                 />
               </GridItem>
             </Grid>
-            </Pressable>
-            </Link>
           </View>
         )}
       />

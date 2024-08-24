@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 
-import { ChakraProvider } from '@chakra-ui/react'
-import SetsScreen from "./screens/SetsScreen";
+import { Button, ButtonGroup, ChakraProvider } from '@chakra-ui/react'
+import { Link } from "expo-router";
 
 export default function Index() {
   //ChakraProvider - mantains and serve status of the UI library
@@ -14,7 +14,12 @@ export default function Index() {
           alignItems: "center",
         }}
       >
-        <SetsScreen />
+        <Text> Welcome </Text>
+        <Link href="/screens/SetsScreen" asChild>
+          <Button>
+          Go to SETS
+          </Button>
+          </Link>
       </View>
     </ChakraProvider>
   );
