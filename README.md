@@ -5,7 +5,6 @@
 In order to make this simple, I'm going to use [Expo](https://docs.expo.dev/get-started/introduction/).
 
  - create-expo-app@3.0.0
- - Chakra UI
 
 
 ### Install instructions - locally run

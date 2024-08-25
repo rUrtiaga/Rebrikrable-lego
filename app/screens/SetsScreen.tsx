@@ -6,16 +6,15 @@ import {
   FlatList,
   StyleSheet,
   Pressable,
+  Image,
 } from "react-native";
 import { ApiManager } from "../api/ApiManager";
 import { SetLego } from "../api/apiTypes";
-import { Grid, GridItem, Image, useToast } from "@chakra-ui/react";
 import { Link } from "expo-router";
 
 export default function SetsScreen() {
   const [data, setData] = useState<SetLego[]>([]);
   const [loading, setLoading] = useState(true);
-  const toast = useToast();
 
   // Function to fetch data from the API
   const fetchData = async () => {
@@ -31,13 +30,8 @@ export default function SetsScreen() {
       setData(json.results); // Update state with the data received
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast({
-        title: "Sets error",
-        description: `Error obtaing datasets, see console for more details`,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      }); // Chakra toast on error
+      // Display an alert instead of toast
+      alert("Error obtaining datasets. See console for more details.");
     } finally {
       setLoading(false); // Set loading to false after fetching data
     }
@@ -48,7 +42,11 @@ export default function SetsScreen() {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />; // Show loading indicator while data is being fetched
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    ); // Show loading indicator while data is being fetched
   }
 
   return (
@@ -59,30 +57,27 @@ export default function SetsScreen() {
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Link href={`/screens/SetScreen/${item.set_num}`} asChild>
-            <Pressable>
-            <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-              <GridItem colSpan={4}>
-                <View>
-                  <Text style={styles.title}>{item.name}</Text>
-                  <Text style={styles.subtitle}>
-                    Set Number: {item.set_num}
-                  </Text>
-                  <Text style={styles.subtitle}>
-                    Num parts: {item.num_parts}
-                  </Text>
-                  <Text style={styles.subtitle}>Theme: {item.theme_id}</Text>
+              <Pressable>
+                <View style={styles.row}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.title}>{item.name}</Text>
+                    <Text style={styles.subtitle}>
+                      Set Number: {item.set_num}
+                    </Text>
+                    <Text style={styles.subtitle}>
+                      Num parts: {item.num_parts}
+                    </Text>
+                    <Text style={styles.subtitle}>
+                      Theme: {item.theme_id}
+                    </Text>
+                  </View>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: item.set_img_url }}
+                    resizeMode="cover"
+                  />
                 </View>
-              </GridItem>
-              <GridItem colStart={6} colEnd={6}>
-                <Image
-                  boxSize="80px"
-                  objectFit="cover"
-                  src={item.set_img_url}
-                  alt={item.name + " image"}
-                />
-              </GridItem>
-            </Grid>
-            </Pressable>
+              </Pressable>
             </Link>
           </View>
         )}
@@ -98,10 +93,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   item: {
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textContainer: {
+    flex: 4,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    flex: 1,
+    marginLeft: 10,
   },
   title: {
     fontSize: 18,

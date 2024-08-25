@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator, FlatList, Pressable } from "react-native";
 import {
-  ChakraProvider,
-  Grid,
-  GridItem,
-  Image,
+  View,
+  ActivityIndicator,
+  FlatList,
+  Pressable,
   Text,
-  useToast,
-} from "@chakra-ui/react";
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import { ApiManager } from "@/app/api/ApiManager";
 import { Part, PartLego } from "@/app/api/apiTypes";
@@ -19,16 +20,15 @@ export default function SetsScreen() {
   const local = useLocalSearchParams<{ set_num: string }>();
   const [data, setData] = useState<PartLego[]>([]);
   const [loading, setLoading] = useState(true);
-  const toast = useToast();
 
-  //Added Part state
+  // Added Part state
   const [addedPartList, setAddedPartList] = useState<Part[]>([]);
 
   // Function to fetch data from the API
   const fetchData = async () => {
     try {
       const response = await ApiManager.getSetParts(local.set_num);
-
+      
       if (!response.ok) {
         // Handle errors if response is not ok
         throw new Error("Network response was not ok");
@@ -38,13 +38,10 @@ export default function SetsScreen() {
       setData(json.results); // Update state with the data received
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast({
-        title: "Set error",
-        description: `Error obtaing datasets, see console for more details`,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      }); // Chakra toast on error
+      Alert.alert(
+        "Set error",
+        "Error obtaining datasets, see console for more details"
+      )
     } finally {
       setLoading(false); // Set loading to false after fetching data
     }
@@ -63,61 +60,84 @@ export default function SetsScreen() {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />; // Show loading indicator while data is being fetched
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    ); // Show loading indicator while data is being fetched
   }
 
   return (
-    <ChakraProvider>
-      <View style={stylesList.container}>
-        <ModalAddPartToSet setAddedPartList={setAddedPartList} />
-        <Text fontSize="1.5em"> Added Parts </Text>
-        <FlatList
-          data={addedPartList}
-          keyExtractor={(item) => String(item.part_cat_id)}
-          renderItem={({ item }) => (
-            <Pressable
-              onPress={() => {
-                removeItem(item);
-              }}
-            >
-              <ItemListPart item={item} />
-            </Pressable>
-          )}
-        />
-        <Text fontSize="1.5em"> Parts of the piece </Text>
-        <FlatList
-          data={data}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <View style={stylesList.item}>
-              <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-                <GridItem colSpan={4}>
-                  <View>
-                    <Text style={stylesList.title}>{item.part.name}</Text>
-                    <Text style={stylesList.subtitle}>
-                      Quantity: {item.quantity}
-                    </Text>
-                    <Text style={stylesList.subtitle}>
-                      Is Spare: {item.is_spare ? "Yes" : "No"}
-                    </Text>
-                    <Text style={stylesList.subtitle}>
-                      Element ID: {item.element_id}
-                    </Text>
-                  </View>
-                </GridItem>
-                <GridItem colStart={6} colEnd={6}>
-                  <Image
-                    boxSize="80px"
-                    objectFit="cover"
-                    src={item.part.part_img_url}
-                    alt={item.part.name + " image"}
-                  />
-                </GridItem>
-              </Grid>
+    <View style={stylesList.container}>
+      <ModalAddPartToSet setAddedPartList={setAddedPartList} />
+      <Text style={styles.headerText}>Added Parts</Text>
+      <FlatList
+        data={addedPartList}
+        keyExtractor={(item) => String(item.part_cat_id)}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => {
+              removeItem(item);
+            }}
+          >
+            <ItemListPart item={item} />
+          </Pressable>
+        )}
+      />
+      <Text style={styles.headerText}>Parts of the piece</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <View style={stylesList.item}>
+            <View style={styles.row}>
+              <View style={styles.textContainer}>
+                <Text style={stylesList.title}>{item.part.name}</Text>
+                <Text style={stylesList.subtitle}>
+                  Quantity: {item.quantity}
+                </Text>
+                <Text style={stylesList.subtitle}>
+                  Is Spare: {item.is_spare ? "Yes" : "No"}
+                </Text>
+                <Text style={stylesList.subtitle}>
+                  Element ID: {item.element_id}
+                </Text>
+              </View>
+              <Image
+                style={styles.image}
+                source={{ uri: item.part.part_img_url }}
+                resizeMode="cover"
+              />
             </View>
-          )}
-        />
-      </View>
-    </ChakraProvider>
+          </View>
+        )}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textContainer: {
+    flex: 4,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    marginLeft: 10,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+});

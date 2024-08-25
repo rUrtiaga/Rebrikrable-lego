@@ -1,32 +1,36 @@
-import { ApiManager } from "@/app/api/ApiManager";
-import { Part, PartLego } from "@/app/api/apiTypes";
+import React, { useEffect, useState } from "react";
 import {
-  Button,
+  View,
+  Text,
   Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useBoolean,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+  Button,
+  ActivityIndicator,
+  Pressable,
+  FlatList,
+  Alert,
+  StyleSheet,
+} from "react-native";
+import { ApiManager } from "@/app/api/ApiManager";
+import { Part } from "@/app/api/apiTypes";
 import ItemListPart from "./ItemListPart";
+
+
+// Create a button component using React.forwardRef
+const CustomButton = React.forwardRef(({ title, onPress, style }, ref) => (
+  <Pressable ref={ref} onPress={onPress} style={style}>
+    <Text>{title}</Text>
+  </Pressable>
+));
+
 
 export default function ModalAddPartToSet({
   setAddedPartList,
 }: {
   setAddedPartList: React.Dispatch<React.SetStateAction<Part[]>>;
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [loading, setLoading] = useBoolean(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Part[]>([]);
-  const toast = useToast();
 
   // Function to fetch data from the API
   const fetchParts = async () => {
@@ -42,15 +46,12 @@ export default function ModalAddPartToSet({
       setData(json.results); // Update state with the data received
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast({
-        title: "Set error",
-        description: `Error obtaing datasets, see console for more details`,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      }); // Chakra toast on error
+      Alert.alert(
+        "Set error",
+        "Error obtaining datasets, see console for more details"
+      );
     } finally {
-      setLoading.off(); // Set loading to false after fetching data
+      setLoading(false); // Set loading to false after fetching data
     }
   };
 
@@ -61,42 +62,68 @@ export default function ModalAddPartToSet({
   }, [isOpen]);
 
   return (
-    <>
-      <Button onClick={onOpen} style={{marginTop: 8}}>Add new Part</Button>
+    <View>
+      <CustomButton
+        title="Add new Part"
+        onPress={() => setIsOpen(true)}
+        style={{ marginTop: 8 }}
+      />
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <FlatList
-                data={data}
-                keyExtractor={(item) => String(item.part_cat_id)}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() =>
-                      setAddedPartList((pList) => [item, ...pList])
-                    }
-                  >
-                    <ItemListPart item={item}/>
-                  </Pressable>
-                )}
-              />
-            )}
-          </ModalBody>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={isOpen}
+        onRequestClose={() => setIsOpen(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Modal Title</Text>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <FlatList
+              data={data}
+              keyExtractor={(item) => String(item.part_cat_id)}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() =>
+                    setAddedPartList((pList) => [item, ...pList]) // Add item to main state
+                  }
+                >
+                  <ItemListPart item={item} />
+                </Pressable>
+              )}
+            />
+          )}
+
+          <View style={styles.modalFooter}>
+            <Button
+              title="Close"
+              onPress={() => setIsOpen(false)}
+              color="#007bff"
+            />
+            <Button title="Secondary Action" onPress={() => {}} color="#6c757d" />
+          </View>
+        </View>
       </Modal>
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  modalFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+});

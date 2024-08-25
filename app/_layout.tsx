@@ -4,8 +4,8 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" />
-      <Stack.Screen name="SetsScreen" />
-      <Stack.Screen name="SetScreen/[set_num]" />
+      <Stack.Screen name="screens/SetsScreen" />
+      <Stack.Screen name="screens/SetScreen/[set_num]" />
     </Stack>
   );
 }
