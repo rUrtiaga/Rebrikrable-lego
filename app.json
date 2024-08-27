@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "giftify_lego",
-    "slug": "giftify_lego",
+    "slug": "lego",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,7 +12,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    
     "ios": {
       "supportsTablet": true
     },
@@ -32,6 +31,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c04f7921-4c63-43c0-9ee4-f9d9d9d66aeb"
+      }
+    },
+    "owner": "r.urtiaga"
   }
 }

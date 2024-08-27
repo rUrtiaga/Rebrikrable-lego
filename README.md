@@ -5,7 +5,11 @@
 In order to make this simple, I'm going to use [Expo](https://docs.expo.dev/get-started/introduction/).
 
  - create-expo-app@3.0.0
+ - Versel (deploy webapp)
 
+
+### Visit app
+You can visit the current web version of the app here [HERE](https://giftify-lego-18n47ouyx-manuels-projects-8ffe0d29.vercel.app)
 
 ### Install instructions - locally run
 With NVM run "nvm use" or install 20.14.x
