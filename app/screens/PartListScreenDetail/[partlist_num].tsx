@@ -19,7 +19,7 @@ import { Button } from "@/components/Button";
 import { useSession } from "@/hooks/ctx";
 
 export default function SetsScreen() {
-  const local = useLocalSearchParams<{ set_num: string }>();
+  const local = useLocalSearchParams<{ partlist_num: string }>();
   const [data, setData] = useState<PartLego[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,10 @@ export default function SetsScreen() {
   // Function to fetch data from the API
   const fetchData = async () => {
     try {
-      const response = await ApiManager.getSetParts(local.set_num);
+      const response = await ApiManager.getPartListsDetail(
+        session as string,
+        local.partlist_num
+      );
 
       if (!response.ok) {
         // Handle errors if response is not ok

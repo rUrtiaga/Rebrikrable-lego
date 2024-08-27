@@ -36,7 +36,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
           // Perform sign-in logic here
           try {
             const response = await ApiManager.postToken({username, password});
-            console.log(response);
             if (!response.ok) {
               // Handle errors if response is not ok
               throw new Error("Network response was not ok");

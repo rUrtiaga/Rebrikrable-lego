@@ -9,14 +9,14 @@ import {
   Image,
 } from "react-native";
 import { ApiManager } from "../api/ApiManager";
-import { SetLego } from "../api/apiTypes";
+import { PartList, SetLego } from "../api/apiTypes";
 import { Link } from "expo-router";
 import { useSession } from "@/hooks/ctx";
 
 export default function SetsScreen() {
-  const [data, setData] = useState<SetLego[]>([]);
+  const [data, setData] = useState<PartList[]>([]);
   const [loading, setLoading] = useState(true);
-  const {session} = useSession();
+  const { session } = useSession();
 
   // Function to fetch data from the API
   const fetchData = async () => {
@@ -55,29 +55,21 @@ export default function SetsScreen() {
     <View style={styles.container}>
       <FlatList
         data={data}
-        keyExtractor={(item) => String(item.set_num)}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Link href={`/screens/SetScreen/${item.set_num}`} asChild>
+            <Link href={`/screens/PartListScreenDetail/${item.id}`} asChild>
               <Pressable>
                 <View style={styles.row}>
                   <View style={styles.textContainer}>
                     <Text style={styles.title}>{item.name}</Text>
                     <Text style={styles.subtitle}>
-                      Set Number: {item.set_num}
+                      Buildable: {item.is_buildable}
                     </Text>
                     <Text style={styles.subtitle}>
                       Num parts: {item.num_parts}
                     </Text>
-                    <Text style={styles.subtitle}>
-                      Theme: {item.theme_id}
-                    </Text>
                   </View>
-                  <Image
-                    style={styles.image}
-                    source={{ uri: item.set_img_url }}
-                    resizeMode="cover"
-                  />
                 </View>
               </Pressable>
             </Link>
@@ -112,12 +104,6 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 4,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    flex: 1,
-    marginLeft: 10,
   },
   title: {
     fontSize: 18,

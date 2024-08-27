@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ForwardedRef, LegacyRef, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,19 +9,28 @@ import {
   FlatList,
   Alert,
   StyleSheet,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import { ApiManager } from "@/app/api/ApiManager";
 import { Part } from "@/app/api/apiTypes";
 import ItemListPart from "./ItemListPart";
 
-
 // Create a button component using React.forwardRef
-const CustomButton = React.forwardRef(({ title, onPress, style }, ref) => (
-  <Pressable ref={ref} onPress={onPress} style={style}>
-    <Text>{title}</Text>
-  </Pressable>
-));
-
+const CustomButton = React.forwardRef(
+  (
+    {
+      title,
+      onPress,
+      style,
+    }: { title: string; onPress: () => void; style: StyleProp<ViewStyle> },
+    ref: LegacyRef<View> | undefined
+  ) => (
+    <Pressable ref={ref} onPress={onPress} style={style}>
+      <Text>{title}</Text>
+    </Pressable>
+  )
+);
 
 export default function ModalAddPartToSet({
   setAddedPartList,
@@ -86,8 +95,8 @@ export default function ModalAddPartToSet({
               keyExtractor={(item) => String(item.part_cat_id)}
               renderItem={({ item }) => (
                 <Pressable
-                  onPress={() =>
-                    setAddedPartList((pList) => [item, ...pList]) // Add item to main state
+                  onPress={
+                    () => setAddedPartList((pList) => [item, ...pList]) // Add item to main state
                   }
                 >
                   <ItemListPart item={item} />
@@ -102,7 +111,11 @@ export default function ModalAddPartToSet({
               onPress={() => setIsOpen(false)}
               color="#007bff"
             />
-            <Button title="Secondary Action" onPress={() => {}} color="#6c757d" />
+            <Button
+              title="Secondary Action"
+              onPress={() => {}}
+              color="#6c757d"
+            />
           </View>
         </View>
       </Modal>
