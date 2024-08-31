@@ -38,9 +38,10 @@ export class ApiManager {
       method: "POST",
       headers: {
         Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
       },
-      body: data,
+      body: data.toString(),
     });
   }
 
@@ -71,9 +72,10 @@ export class ApiManager {
         method: "POST",
         headers: {
           Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
         },
-        body: data,
+        body: data.toString(),
       }
     );
   };
@@ -94,9 +96,10 @@ export class ApiManager {
           method: "POST",
           headers: {
             Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             Authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
           },
-          body: data,
+          body: data.toString(),
         }
       );
     };

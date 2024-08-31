@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Text, View, TextInput, StyleSheet, Button } from "react-native";
+import { Text, View, TextInput, StyleSheet, Button, Image } from "react-native";
 import { ApiManager } from "./api/ApiManager";
 import { Redirect, router } from "expo-router";
 import { useSession } from "@/hooks/ctx";
+import { LegoButton } from "@/components/LegoButton";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -30,7 +31,7 @@ export default function LoginScreen() {
         alignItems: "center",
       }}
     >
-      <Text> LogIn </Text>
+      <Image source={require("@/assets/images/login-logo.svg")} />
       <TextInput
         style={styles.input}
         placeholder="email or user"
@@ -45,7 +46,7 @@ export default function LoginScreen() {
         onChangeText={setPasword}
         secureTextEntry={true}
       />
-      <Button title="Log In" onPress={handleLogin} />
+      <LegoButton title="Log In" onPress={handleLogin} />
     </View>
   );
 }

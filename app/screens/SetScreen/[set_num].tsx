@@ -15,7 +15,7 @@ import { Part, PartLego, PartPost } from "@/app/api/apiTypes";
 import ModalAddPartToSet from "@/components/ModalAddPartToSet";
 import { stylesList } from "@/constants/StyleList";
 import ItemListPart from "@/components/ItemListPart";
-import { Button } from "@/components/Button";
+import { LegoButton } from "@/components/LegoButton";
 import { useSession } from "@/hooks/ctx";
 
 export default function SetsScreen() {
@@ -121,7 +121,7 @@ export default function SetsScreen() {
   return (
     <View style={stylesList.container}>
       <ModalAddPartToSet setAddedPartList={setAddedPartList} />
-      <Button title="CREATE my part" onPress={handleCreate} />
+      <LegoButton title="CREATE my part" onPress={handleCreate} />
       <Text style={styles.headerText}>Added Parts</Text>
       <FlatList
         data={addedPartList}
