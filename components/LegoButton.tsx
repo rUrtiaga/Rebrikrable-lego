@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import {
+  ActivityIndicator,
   GestureResponderEvent,
   Pressable,
   StyleSheet,
@@ -16,9 +17,11 @@ import Dot, { DotPosition } from "./Dot";
 export function LegoButton({
   title,
   onPress,
+  loading,
 }: {
   title: string;
   onPress: (event: GestureResponderEvent) => void;
+  loading?: boolean;
 }) {
   const pressAnimation = useSharedValue(0);
 
@@ -56,21 +59,24 @@ export function LegoButton({
   }));
 
   return (
-    <Animated.View style={animatedStyle}>
-      <Dot position={DotPosition.topLeft} />
-      <Dot position={DotPosition.bottomLeft} />
-      <Pressable
-        onPress={(p) => {
-          onPress(p);
-        }}
-        onPressIn={onPressAnimationIn}
-        onPressOut={onPressAnimationOut}
-      >
-        <Text style={styles.text}>{title}</Text>
-      </Pressable>
-      <Dot position={DotPosition.topRight} />
-      <Dot position={DotPosition.bottomRight} />
-    </Animated.View>
+    <Pressable
+      onPress={(p) => {
+        onPress(p);
+      }}
+      onPressIn={onPressAnimationIn}
+      onPressOut={onPressAnimationOut}
+      disabled={loading}
+    >
+      <Animated.View style={animatedStyle}>
+        <Dot position={DotPosition.topLeft} />
+        <Dot position={DotPosition.bottomLeft} />
+        <Text style={styles.text}>
+          {loading ? <ActivityIndicator style={{marginTop: 12}} color="red" /> : title}
+        </Text>
+        <Dot position={DotPosition.topRight} />
+        <Dot position={DotPosition.bottomRight} />
+      </Animated.View>
+    </Pressable>
   );
 }
 

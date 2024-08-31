@@ -4,22 +4,27 @@ import { ApiManager } from "./api/ApiManager";
 import { Redirect, router } from "expo-router";
 import { useSession } from "@/hooks/ctx";
 import { LegoButton } from "@/components/LegoButton";
+import LogoTextInput from "@/components/LogoTextInput";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPasword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { signIn, session } = useSession();
+
 
   // Function to fetch data from the API
   const handleLogin = async () => {
+    setLoading(true)
     await signIn(username, password);
+    setLoading(false)
     // Navigate after signing in. You may want to tweak this to ensure sign-in is
     // successful before navigating.
     router.replace("/screens/");
   };
 
   // Redirect when user is alredy log-in
-  if(session){
+  if (session) {
     return <Redirect href="/screens/" />;
   }
 
@@ -31,32 +36,26 @@ export default function LoginScreen() {
         alignItems: "center",
       }}
     >
-      <Image source={require("@/assets/images/login-logo.svg")} />
-      <TextInput
-        style={styles.input}
-        placeholder="email or user"
+      <Image
+        style={{ marginBottom: 50 }}
+        source={require("@/assets/images/login-logo.svg")}
+      />
+      <LogoTextInput
+        placeholder="Email or Username"
         value={username}
         onChangeText={setUsername}
         keyboardType="default"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="password"
+      <LogoTextInput
+        placeholder="Password"
         value={password}
         onChangeText={setPasword}
         secureTextEntry={true}
+        onSubmitEditing={handleLogin}
       />
-      <LegoButton title="Log In" onPress={handleLogin} />
+      <View style={{ marginTop: 30 }}>
+        <LegoButton title="Log In" onPress={handleLogin} loading={loading}/>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    width: 150,
-    borderColor: "grey",
-    fontSize: 16,
-    borderStyle: "solid",
-    borderWidth: 2,
-  },
-});

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, LegacyRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,28 +9,12 @@ import {
   FlatList,
   Alert,
   StyleSheet,
-  StyleProp,
-  ViewStyle,
 } from "react-native";
 import { ApiManager } from "@/app/api/ApiManager";
 import { Part } from "@/app/api/apiTypes";
 import ItemListPart from "./ItemListPart";
+import { LegoButton } from "./LegoButton";
 
-// Create a button component using React.forwardRef
-const CustomButton = React.forwardRef(
-  (
-    {
-      title,
-      onPress,
-      style,
-    }: { title: string; onPress: () => void; style: StyleProp<ViewStyle> },
-    ref: LegacyRef<View> | undefined
-  ) => (
-    <Pressable ref={ref} onPress={onPress} style={style}>
-      <Text>{title}</Text>
-    </Pressable>
-  )
-);
 
 export default function ModalAddPartToSet({
   setAddedPartList,
@@ -72,11 +56,9 @@ export default function ModalAddPartToSet({
 
   return (
     <View>
-      <CustomButton
+      <LegoButton 
         title="Add new Part"
-        onPress={() => setIsOpen(true)}
-        style={{ marginTop: 8 }}
-      />
+        onPress={() => setIsOpen(true)} />
 
       <Modal
         animationType="slide"
