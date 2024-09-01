@@ -30,7 +30,7 @@ export default function SetsScreen() {
       }
 
       const json = await response.json(); // Parse JSON response
-      setData(json.results); // Update state with the data received
+      setData((json.results as PartList[]).sort((p1,p2)=>p2.id - p1.id)); // Update state with the data received and order newest first
     } catch (error) {
       console.error("Error fetching data:", error);
       // Display an alert instead of toast
