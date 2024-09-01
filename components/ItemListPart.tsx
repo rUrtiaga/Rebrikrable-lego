@@ -1,45 +1,41 @@
 import React from "react";
-import { Part } from "@/app/api/apiTypes";
+import { Part, PartLego } from "@/app/api/apiTypes";
 import { stylesList } from "@/constants/StyleList";
 import { View, Text, Image, StyleSheet } from "react-native";
 
-export default function ItemListPart({ item }: { item: Part }) {
+export default function ItemListPart({ item, quantity= 1 }: { item: Part | PartLego, quantity?: number }) {
+  // Transform item into a unified format for rendering
+  const itemShow = "part" in item
+    ? {
+        key: String(item.id),
+        title: item.part.name,
+        image: item.part.part_img_url || "../../assets/images/icon.png",
+        quantity: item.quantity,
+      }
+    : {
+        key: item.name,
+        title: item.name,
+        image: item.part_img_url || "../../assets/images/icon.png",
+        quantity,
+      };
+
   return (
-    <View style={stylesList.item} key={item.part_num}>
-      <View style={styles.gridContainer}>
+    <View style={stylesList.item} key={itemShow.key}>
+      <View style={stylesList.gridContainer}>
         {/* First Column */}
-        <View style={styles.gridItem}>
-          <Text style={stylesList.title}>{item.name}</Text>
+        <View style={stylesList.gridItem}>
+          <Text style={stylesList.title}>{itemShow.title}</Text>
+          <Text style={stylesList.subtitle}>Quantity: {itemShow.quantity}</Text>
         </View>
         {/* Second Column (Image) */}
-        <View style={styles.imageContainer}>
+        <View style={stylesList.imageContainer}>
           <Image
-            style={styles.image}
-            source={{ uri: item.part_img_url }}
-            alt={`${item.name} image`}
+            style={stylesList.image}
+            source={{ uri: itemShow.image }}
+            alt={`${itemShow.title} image`}
           />
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  gridContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  gridItem: {
-    flex: 4, // Occupies the first 4/5ths of the grid
-  },
-  imageContainer: {
-    flex: 1, // Occupies the last 1/5th of the grid
-    alignItems: "center",
-  },
-  image: {
-    width: 80,
-    height: 80,
-    resizeMode: "cover",
-  },
-});

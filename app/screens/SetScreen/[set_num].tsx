@@ -17,11 +17,16 @@ import { stylesList } from "@/constants/StyleList";
 import ItemListPart from "@/components/ItemListPart";
 import { LegoButton } from "@/components/LegoButton";
 import { useSession } from "@/hooks/ctx";
+import { stylesTitles } from "@/constants/StyleTitles";
+import { useCustomAlert } from "@/hooks/useCustomAlert";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function SetsScreen() {
   const local = useLocalSearchParams<{ set_num: string }>();
   const [data, setData] = useState<PartLego[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { AlertModal, showAlert } = useCustomAlert();
 
   const { session } = useSession();
 
@@ -97,9 +102,13 @@ export default function SetsScreen() {
       console.log(idList);
       await addPartLists(idList.id, generatePartList());
       //Show message success.
+      showAlert(
+        "New SET created",
+        "Great you have a new set with your Set parts and the new parts that you added"
+      );
     } catch (error) {
       console.error(error);
-      Alert.alert(
+      showAlert(
         "Set error",
         "Error saving datasets, see console for more details"
       );
@@ -120,50 +129,41 @@ export default function SetsScreen() {
 
   return (
     <View style={stylesList.container}>
-      <ModalAddPartToSet setAddedPartList={setAddedPartList} />
-      <LegoButton title="CREATE my part" onPress={handleCreate} />
-      <Text style={styles.headerText}>Added Parts</Text>
-      <FlatList
-        data={addedPartList}
-        keyExtractor={(item) => String(item.part_cat_id)}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => {
-              removeItem(item);
-            }}
-          >
-            <ItemListPart item={item} />
-          </Pressable>
-        )}
-      />
-      <Text style={styles.headerText}>Parts of the piece</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <View style={stylesList.item}>
-            <View style={styles.row}>
-              <View style={styles.textContainer}>
-                <Text style={stylesList.title}>{item.part.name}</Text>
-                <Text style={stylesList.subtitle}>
-                  Quantity: {item.quantity}
-                </Text>
-                <Text style={stylesList.subtitle}>
-                  Is Spare: {item.is_spare ? "Yes" : "No"}
-                </Text>
-                <Text style={stylesList.subtitle}>
-                  Element ID: {item.element_id}
-                </Text>
-              </View>
-              <Image
-                style={styles.image}
-                source={{ uri: item.part.part_img_url }}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-        )}
-      />
+      <View style={styles.row}>
+        <ModalAddPartToSet setAddedPartList={setAddedPartList} />
+        <LegoButton title="SEND NEW SET" onPress={handleCreate} />
+      </View>
+      {addedPartList.length > 0 && (
+        <View style={{ flex: 3 }}>
+          <Text style={stylesTitles.h3}>Added Parts</Text>
+          <ScrollView>
+            <FlatList
+              data={addedPartList}
+              keyExtractor={(item) => String(item.part_cat_id)}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => {
+                    removeItem(item);
+                  }}
+                >
+                  <ItemListPart item={item} />
+                </Pressable>
+              )}
+            />
+          </ScrollView>
+        </View>
+      )}
+      <View style={{ flex: 3 }}>
+        <Text style={stylesTitles.h3}>Parts of the piece</Text>
+        <ScrollView>
+          <FlatList
+            data={data}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({ item }) => <ItemListPart item={item} />}
+          />
+        </ScrollView>
+      </View>
+      <AlertModal />
     </View>
   );
 }
@@ -186,10 +186,5 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     marginLeft: 10,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 10,
   },
 });

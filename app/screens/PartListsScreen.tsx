@@ -12,6 +12,7 @@ import { ApiManager } from "../api/ApiManager";
 import { PartList, SetLego } from "../api/apiTypes";
 import { Link } from "expo-router";
 import { useSession } from "@/hooks/ctx";
+import ItemListSet from "@/components/ItemListSet";
 
 export default function SetsScreen() {
   const [data, setData] = useState<PartList[]>([]);
@@ -57,23 +58,7 @@ export default function SetsScreen() {
         data={data}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Link href={`/screens/PartListScreenDetail/${item.id}`} asChild>
-              <Pressable>
-                <View style={styles.row}>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.title}>{item.name}</Text>
-                    <Text style={styles.subtitle}>
-                      Buildable: {item.is_buildable}
-                    </Text>
-                    <Text style={styles.subtitle}>
-                      Num parts: {item.num_parts}
-                    </Text>
-                  </View>
-                </View>
-              </Pressable>
-            </Link>
-          </View>
+          <ItemListSet item={item}/>
         )}
       />
     </View>

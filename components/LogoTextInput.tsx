@@ -6,13 +6,13 @@ import { Colors } from "@/constants/Colors";
 export default function LogoTextInput(props: React.JSX.IntrinsicAttributes & TextInputProps & NativeViewGestureHandlerProps & React.RefAttributes<React.ComponentType<any>>) {
   return (
     <TextInput
-     {...props}
-      style={{...styles.input, ...props.style as Object}}
-      placeholder={props.placeholder}
-      value={props.value}
-      onChangeText={props.onChangeText}
-      secureTextEntry={props.secureTextEntry}
-      placeholderTextColor={"grey"}
+    style={{...styles.input, ...props.style as Object}}
+    placeholder={props.placeholder}
+    value={props.value}
+    onChangeText={props.onChangeText}
+    secureTextEntry={props.secureTextEntry}
+    placeholderTextColor={"grey"}
+    {...props}
     />
   );
 }

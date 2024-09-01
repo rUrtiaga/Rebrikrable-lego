@@ -11,6 +11,7 @@ export const Colors = {
   primary: "#E5A000",
   secondary: "#AA7700",
   lightPrimary: "#FFB200",
+  blue: "#33ABE1",
   tint: tintColorLight,
   icon: '#687076',
 };

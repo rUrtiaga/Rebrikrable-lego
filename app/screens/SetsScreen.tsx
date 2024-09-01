@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   ActivityIndicator,
   FlatList,
   StyleSheet,
-  Pressable,
-  Image,
 } from "react-native";
 import { ApiManager } from "../api/ApiManager";
 import { SetLego } from "../api/apiTypes";
-import { Link } from "expo-router";
+import ItemListSet from "@/components/ItemListSet";
 
 export default function SetsScreen() {
   const [data, setData] = useState<SetLego[]>([]);
@@ -54,33 +51,7 @@ export default function SetsScreen() {
       <FlatList
         data={data}
         keyExtractor={(item) => String(item.set_num)}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Link href={`/screens/SetScreen/${item.set_num}`} asChild>
-              <Pressable>
-                <View style={styles.row}>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.title}>{item.name}</Text>
-                    <Text style={styles.subtitle}>
-                      Set Number: {item.set_num}
-                    </Text>
-                    <Text style={styles.subtitle}>
-                      Num parts: {item.num_parts}
-                    </Text>
-                    <Text style={styles.subtitle}>
-                      Theme: {item.theme_id}
-                    </Text>
-                  </View>
-                  <Image
-                    style={styles.image}
-                    source={{ uri: item.set_img_url }}
-                    resizeMode="cover"
-                  />
-                </View>
-              </Pressable>
-            </Link>
-          </View>
-        )}
+        renderItem={({ item }) => <ItemListSet item={item} />}
       />
     </View>
   );
@@ -97,32 +68,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  item: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  textContainer: {
-    flex: 4,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    flex: 1,
-    marginLeft: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666",
   },
 });

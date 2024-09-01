@@ -111,13 +111,14 @@ export class ApiManager {
   };
 
   static getPartListsDetail = async (session_token: string, id_partlist: string) => {
-    return fetch(
+     return fetch(
       `https://rebrickable.com/api/v3/users/${session_token}/partlists/${id_partlist}/parts`,
       {
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
+          "Content-Type": "application/json",
+          authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
         },
       }
     );

@@ -23,7 +23,7 @@ export default function Index() {
         <LegoButton title="Go to SETS" onPress={() => {}} />
       </Link>
       <Link href="/screens/PartListsScreen" asChild>
-        <LegoButton title="Go to PARTLISTS" onPress={() => {}} />
+        <LegoButton title="Go to MY SETS" onPress={() => {}} />
       </Link>
 
       <Link href="/" asChild>

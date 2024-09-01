@@ -14,6 +14,7 @@ import { ApiManager } from "@/app/api/ApiManager";
 import { Part } from "@/app/api/apiTypes";
 import ItemListPart from "./ItemListPart";
 import { LegoButton } from "./LegoButton";
+import { stylesTitles } from "@/constants/StyleTitles";
 
 
 export default function ModalAddPartToSet({
@@ -57,7 +58,7 @@ export default function ModalAddPartToSet({
   return (
     <View>
       <LegoButton 
-        title="Add new Part"
+        title="Add more Parts"
         onPress={() => setIsOpen(true)} />
 
       <Modal
@@ -67,18 +68,20 @@ export default function ModalAddPartToSet({
         onRequestClose={() => setIsOpen(false)}
       >
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Modal Title</Text>
-
+          <Text style={stylesTitles.h3}>Add parts to SET</Text>
           {loading ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : (
             <FlatList
               data={data}
-              keyExtractor={(item) => String(item.part_cat_id)}
+              keyExtractor={(item) => String(item.part_num)}
               renderItem={({ item }) => (
                 <Pressable
                   onPress={
-                    () => setAddedPartList((pList) => [item, ...pList]) // Add item to main state
+                    () => {
+                      setAddedPartList((pList) => [item, ...pList]) // Add item to main state
+                      setIsOpen(false)
+                    }
                   }
                 >
                   <ItemListPart item={item} />
@@ -88,15 +91,9 @@ export default function ModalAddPartToSet({
           )}
 
           <View style={styles.modalFooter}>
-            <Button
+            <LegoButton
               title="Close"
               onPress={() => setIsOpen(false)}
-              color="#007bff"
-            />
-            <Button
-              title="Secondary Action"
-              onPress={() => {}}
-              color="#6c757d"
             />
           </View>
         </View>

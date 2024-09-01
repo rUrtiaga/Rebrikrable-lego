@@ -17,11 +17,14 @@ import { stylesList } from "@/constants/StyleList";
 import ItemListPart from "@/components/ItemListPart";
 import { LegoButton } from "@/components/LegoButton";
 import { useSession } from "@/hooks/ctx";
+import { stylesTitles } from "@/constants/StyleTitles";
+import { useCustomAlert } from "@/hooks/useCustomAlert";
 
 export default function SetsScreen() {
   const local = useLocalSearchParams<{ partlist_num: string }>();
   const [data, setData] = useState<PartLego[]>([]);
   const [loading, setLoading] = useState(true);
+  const { AlertModal, showAlert } = useCustomAlert();
 
   const { session } = useSession();
 
@@ -36,18 +39,27 @@ export default function SetsScreen() {
         local.partlist_num
       );
 
+      console.log("HEADERS",response.headers)
+      const json = await response.json(); // Parse JSON response
+      console.log(
+        "RESPONSE ERROR",
+        session as string,
+        local.partlist_num,
+        response, 
+        json
+      );
       if (!response.ok) {
         // Handle errors if response is not ok
-        throw new Error("Network response was not ok");
+        const msj = json.detail || "Network response was not ok"
+        throw new Error(msj);
       }
 
-      const json = await response.json(); // Parse JSON response
       setData(json.results); // Update state with the data received
     } catch (error) {
       console.error("Error fetching data:", error);
-      Alert.alert(
-        "Set error",
-        "Error obtaining datasets, see console for more details"
+      showAlert(
+        "Get error",
+        "Error getting datasets, see console for more details"
       );
     } finally {
       setLoading(false); // Set loading to false after fetching data
@@ -100,6 +112,10 @@ export default function SetsScreen() {
       console.log(idList);
       await addPartLists(idList.id, generatePartList());
       //Show message success.
+      showAlert(
+        "New SET created",
+        "Great you have a new set with your Set parts and the new parts that you added"
+      );
     } catch (error) {
       console.error(error);
       Alert.alert(
@@ -123,50 +139,13 @@ export default function SetsScreen() {
 
   return (
     <View style={stylesList.container}>
-      <ModalAddPartToSet setAddedPartList={setAddedPartList} />
-      <LegoButton title="CREATE my part" onPress={handleCreate} />
-      <Text style={styles.headerText}>Added Parts</Text>
-      <FlatList
-        data={addedPartList}
-        keyExtractor={(item) => String(item.part_cat_id)}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => {
-              removeItem(item);
-            }}
-          >
-            <ItemListPart item={item} />
-          </Pressable>
-        )}
-      />
-      <Text style={styles.headerText}>Parts of the piece</Text>
+      <Text style={stylesTitles.h3}>Parts of the piece</Text>
       <FlatList
         data={data}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <View style={stylesList.item}>
-            <View style={styles.row}>
-              <View style={styles.textContainer}>
-                <Text style={stylesList.title}>{item.part.name}</Text>
-                <Text style={stylesList.subtitle}>
-                  Quantity: {item.quantity}
-                </Text>
-                <Text style={stylesList.subtitle}>
-                  Is Spare: {item.is_spare ? "Yes" : "No"}
-                </Text>
-                <Text style={stylesList.subtitle}>
-                  Element ID: {item.element_id}
-                </Text>
-              </View>
-              <Image
-                style={styles.image}
-                source={{ uri: item.part.part_img_url }}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-        )}
+        renderItem={({ item }) => <ItemListPart item={item} />}
       />
+      <AlertModal />
     </View>
   );
 }
