@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     shadowColor: "black",
     shadowOpacity: 0.3,
-    shadowOffset: { width: 1, height: 1 },
     elevation: 4,
     borderBottomWidth: 1,
     borderRightWidth: 1,
@@ -28,6 +27,7 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 50,
     zIndex: 50,
+    shadowOffset: { width: 1, height: 1 },
   },
   topLeft: {
     top: 4,

@@ -136,32 +136,28 @@ export default function SetsScreen() {
       {addedPartList.length > 0 && (
         <View style={{ flex: 3 }}>
           <Text style={stylesTitles.h3}>Added Parts</Text>
-          <ScrollView>
-            <FlatList
-              data={addedPartList}
-              keyExtractor={(item) => String(item.part_cat_id)}
-              renderItem={({ item }) => (
-                <Pressable
-                  onPress={() => {
-                    removeItem(item);
-                  }}
-                >
-                  <ItemListPart item={item} />
-                </Pressable>
-              )}
-            />
-          </ScrollView>
+          <FlatList
+            data={addedPartList}
+            keyExtractor={(item) => String(item.part_cat_id)}
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => {
+                  removeItem(item);
+                }}
+              >
+                <ItemListPart item={item} />
+              </Pressable>
+            )}
+          />
         </View>
       )}
       <View style={{ flex: 3 }}>
         <Text style={stylesTitles.h3}>Parts of the piece</Text>
-        <ScrollView>
-          <FlatList
-            data={data}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => <ItemListPart item={item} />}
-          />
-        </ScrollView>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <ItemListPart item={item} />}
+        />
       </View>
       <AlertModal />
     </View>

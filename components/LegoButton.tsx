@@ -42,20 +42,21 @@ export function LegoButton({
   };
 
   const animatedStyle = useAnimatedStyle(() => ({
-    borderRadius: 8,
     borderTopWidth: pressAnimation.value,
     borderBottomWidth: 5 - pressAnimation.value,
     borderColor: Colors.secondary,
+    borderRadius: 8,
     borderBottomStartRadius: 10,
     shadowColor: "black",
-    shadowOffset: { width: 2, height: 5 },
     shadowOpacity: 0.1,
     backgroundColor: Colors.primary,
     height: 50,
-    width: 250,
+    maxWidth: 250,
+    minWidth: 160,
     alignItems: "center",
     justifyContent: "center",
     margin: 10,
+    shadowOffset: { width: 2, height: 5 },
   }));
 
   return (
@@ -71,7 +72,11 @@ export function LegoButton({
         <Dot position={DotPosition.topLeft} />
         <Dot position={DotPosition.bottomLeft} />
         <Text style={styles.text}>
-          {loading ? <ActivityIndicator style={{marginTop: 12}} color="red" /> : title}
+          {loading ? (
+            <ActivityIndicator style={{ marginTop: 12 }} color="red" />
+          ) : (
+            title
+          )}
         </Text>
         <Dot position={DotPosition.topRight} />
         <Dot position={DotPosition.bottomRight} />
