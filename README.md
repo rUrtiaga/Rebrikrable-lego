@@ -2,9 +2,20 @@
 
 An app to add parts to Rebrikable Sets as your Sets.
 
-[Video Android](docs/images/android-video.gif)
-[Video iOS](docs/images/ios-video.gif)
+### Visit app
+You can visit the current web version of the app here [HERE](https://giftify-lego.vercel.app)
 
+##### Android and iOS
+<div>
+ <img src="docs/images/android-video.gif" width="200">
+ <img src="docs/images/ios-video.gif" width="200">
+</div>
+
+### Figma
+
+![Figma](docs/images/figma-img.png)
+
+[Figma design](https://www.figma.com/design/8PC84TxdohJaXYDjJN2Nkz/Lego?node-id=0-1&t=K0UkUEivyoXQxEgm-1) of few screens.
 
 ### Tech stack
 
@@ -13,18 +24,10 @@ In order to make this simple, I'm going to use [Expo](https://docs.expo.dev/get-
  - create-expo-app@3.0.0
  - Versel (deploy webapp)
 
-### Figma
-
-[Figma](docs/images/figma-img.png)
-
-[Figma design](https://www.figma.com/design/8PC84TxdohJaXYDjJN2Nkz/Lego?node-id=0-1&t=K0UkUEivyoXQxEgm-1) of few screens.
-
-
-
-
-
-### Visit app
-You can visit the current web version of the app here [HERE](giftify-lego.vercel.app)
+### API
+From official website v3
+https://rebrickable.com/api/v3/docs
+(With Swagger for docs 💛)
 
 
 ### Install instructions - locally run
@@ -32,11 +35,6 @@ With NVM run "nvm use" or install 20.14.x
 Be sure that .env file have keys 
       EXPO_PUBLIC_TEST_API_REBRICKABLE=api_key;
 Follow "Get started" on expo basic section
-
-### API
-From official website v3
-https://rebrickable.com/api/v3/docs
-(With Swagger for docs 💛)
 
 
 ----------
@@ -69,19 +67,3 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
