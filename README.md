@@ -1,5 +1,11 @@
 # Lego
 
+An app to add parts to Rebrikable Sets as your Sets.
+
+[Video Android](docs/images/android-video.gif)
+[Video iOS](docs/images/ios-video.gif)
+
+
 ### Tech stack
 
 In order to make this simple, I'm going to use [Expo](https://docs.expo.dev/get-started/introduction/).
@@ -7,9 +13,19 @@ In order to make this simple, I'm going to use [Expo](https://docs.expo.dev/get-
  - create-expo-app@3.0.0
  - Versel (deploy webapp)
 
+### Figma
+
+[Figma](docs/images/figma-img.png)
+
+[Figma design](https://www.figma.com/design/8PC84TxdohJaXYDjJN2Nkz/Lego?node-id=0-1&t=K0UkUEivyoXQxEgm-1) of few screens.
+
+
+
+
 
 ### Visit app
-You can visit the current web version of the app here [HERE](https://giftify-lego-18n47ouyx-manuels-projects-8ffe0d29.vercel.app)
+You can visit the current web version of the app here [HERE](giftify-lego.vercel.app)
+
 
 ### Install instructions - locally run
 With NVM run "nvm use" or install 20.14.x

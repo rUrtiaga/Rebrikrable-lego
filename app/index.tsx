@@ -38,7 +38,7 @@ export default function LoginScreen() {
       >
         <Image
           style={{ marginBottom: 50 }}
-          source={require("@/assets/images/login-logo.svg")}
+          source={require("@/assets/images/login-logo.png")}
         />
         <LogoTextInput
           placeholder="Email or Username"

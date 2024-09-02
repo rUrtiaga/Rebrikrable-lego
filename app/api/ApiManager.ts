@@ -118,7 +118,7 @@ export class ApiManager {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
+          Authorization: `key ${process.env.EXPO_PUBLIC_TEST_API_REBRICKABLE}`,
         },
       }
     );
